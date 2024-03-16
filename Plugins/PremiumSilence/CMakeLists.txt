@@ -1,6 +1,6 @@
-project(NewPluginTemplate VERSION 0.0.1)
+project(PremiumSilence VERSION 0.0.1)
 
-set (BaseTargetName NewPluginTemplate)
+set (BaseTargetName PremiumSilence)
 
 juce_set_aax_sdk_path("/Users/jamiepond/projects/aax-sdk")
 
