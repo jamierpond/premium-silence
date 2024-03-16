@@ -18,7 +18,6 @@ PremiumSilenceAudioProcessor::PremiumSilenceAudioProcessor()
 
 void PremiumSilenceAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
                                                 juce::MidiBuffer& midiMessages)
-
 {
     auto amount = parameters.getRawParameterValue ("Amount");
     juce::ignoreUnused(midiMessages, amount);
