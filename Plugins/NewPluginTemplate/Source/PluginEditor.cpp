@@ -12,19 +12,18 @@ PremiumSilenceAudioProcessorEditor::PremiumSilenceAudioProcessorEditor(
 
     auto ratio = bgWidth / bgHeight;
 
-    auto initialWidth = 800.0f;
-    auto initialHeight = initialWidth / ratio;
+//     auto initialWidth = 800.0f;
+//     auto initialHeight = initialWidth / ratio;
 
-    setResizeLimits(400, 400.0 / ratio, 1200, 1200.0 / ratio);
+    setResizeLimits(400, int(400.0 / ratio), 1200, int(1200.0 / ratio));
     getConstrainer()->setFixedAspectRatio(ratio);
-    setSize(800.0, 800.0 / ratio);
+    setSize(800.0, int(800.0 / ratio));
 
     addAndMakeVisible(amountSlider);
     amountSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
 
     addAndMakeVisible(silenceButton);
     silenceButton.setButtonText("Silence");
-
 }
 
 void PremiumSilenceAudioProcessorEditor::paint(juce::Graphics& g)

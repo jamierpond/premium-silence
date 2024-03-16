@@ -25,8 +25,6 @@ void PremiumSilenceAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer
     auto silent = parameters.getRawParameterValue ("Silence");
     bool shouldBeSilent = silent->load() > 0.5f;
 
-
-
     if (shouldBeSilent)
         buffer.clear();
 }
