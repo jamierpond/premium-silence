@@ -1,3 +1,4 @@
+#include "BinaryData.h"
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -31,6 +32,8 @@ PremiumSilenceAudioProcessorEditor::PremiumSilenceAudioProcessorEditor(
     buttonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
         p.parameters, "Silence", silenceButton);
 
+
+    setLookAndFeel(&buttonLf);
 }
 
 void PremiumSilenceAudioProcessorEditor::paint(juce::Graphics& g)
