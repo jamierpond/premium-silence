@@ -1,4 +1,4 @@
-# Premium Silence by Present Day Production
+# Premium Silence by PresentDayProduction
 
 To build, all you have to do is load this project in your favorite IDE 
 (CLion/Visual Studio/VSCode/etc) 
