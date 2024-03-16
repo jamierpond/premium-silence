@@ -34,13 +34,18 @@ PremiumSilenceAudioProcessorEditor::PremiumSilenceAudioProcessorEditor(
 
 
     setLookAndFeel(&buttonLf);
+
+    addAndMakeVisible(pdpButton);
 }
 
 void PremiumSilenceAudioProcessorEditor::paint(juce::Graphics& g)
 {
     // draw the image to fit the available space
-    auto bound = getLocalBounds();
-    g.drawImage(background, bound.toFloat());
+    auto bounds = getLocalBounds().toFloat();
+    g.drawImage(background, bounds);
+
+    auto pdpButtonBounds = bounds.removeFromLeft(bounds.getHeight() / 4);
+    pdpButton.setBounds(pdpButtonBounds.toNearestInt());
 }
 
 void PremiumSilenceAudioProcessorEditor::resized()
