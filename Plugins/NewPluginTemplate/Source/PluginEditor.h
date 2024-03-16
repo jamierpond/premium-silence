@@ -10,15 +10,27 @@ struct ButtonLf : juce::LookAndFeel_V4
                           bool,
                           bool) override
     {
-        auto bound = button.getLocalBounds();
-        if (button.getToggleState())
-        {
-            g.drawImage(buttonOn, bound.toFloat());
-        }
-        else
-        {
-            g.drawImage(buttonOff, bound.toFloat());
-        }
+        auto bounds = button.getLocalBounds().toFloat(); // Get the button's bounds
+
+        // Determine which image to use based on the toggle state
+        const auto& image = button.getToggleState() ? buttonOn : buttonOff;
+
+        // Calculate the scale factor to fit the image within the button's bounds while maintaining its aspect ratio
+        auto scaleFactor = juce::jmin(bounds.getWidth() / image.getWidth(),
+                                      bounds.getHeight() / image.getHeight());
+
+        // Calculate the centered position for the image
+        float imageX =
+            bounds.getX() + (bounds.getWidth() - image.getWidth() * scaleFactor) / 2.0f;
+        float imageY =
+            bounds.getY() + (bounds.getHeight() - image.getHeight() * scaleFactor) / 2.0f;
+
+        // Create an AffineTransform for scaling and translation to the centered position
+        auto transform =
+            juce::AffineTransform::scale(scaleFactor).translated(imageX, imageY);
+
+        // Draw the image centered within the button
+        g.drawImageTransformed(image, transform);
     }
 
     void drawRotarySlider(juce::Graphics& g,
