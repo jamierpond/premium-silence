@@ -1,4 +1,3 @@
-#include "BinaryData.h"
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
