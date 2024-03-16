@@ -34,14 +34,27 @@ struct ButtonLf : juce::LookAndFeel_V4
         auto sliderBounds = slider.getLocalBounds().toFloat();
         auto imageBounds = knob.getBounds().toFloat();
 
-        auto rotation =  rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
+        auto scaleFactors =
+            juce::jmin(sliderBounds.getWidth() / imageBounds.getWidth(),
+                       sliderBounds.getHeight() / imageBounds.getHeight());
 
-        auto centerX = sliderBounds.getCentreX();
-        auto centerY = sliderBounds.getCentreY();
+        auto rotation = rotaryStartAngle
+                        + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
 
-        auto affine = juce::AffineTransform::identity
-            .translated(centerX - imageBounds.getCentreX(), centerY - imageBounds.getCentreY())
-            .rotated(rotation, centerX, centerY);
+        // Center of the knob image within the slider bounds
+        auto imageCenterX = sliderBounds.getCentreX();
+        auto imageCenterY =
+            sliderBounds.getY() + (imageBounds.getHeight() * scaleFactors * 0.5f)
+            + (sliderBounds.getHeight() - imageBounds.getHeight() * scaleFactors) * 0.5f;
+
+        // Apply scaling, translation, and rotation to the AffineTransform
+        auto affine =
+            juce::AffineTransform()
+                .scaled(scaleFactors)
+                .translated(sliderBounds.getX(),
+                            imageCenterY
+                                - (imageBounds.getHeight() * scaleFactors * 0.5f))
+                .rotated(rotation, imageCenterX, imageCenterY);
 
         // Draw the image with the transformation applied
         g.drawImageTransformed(knob, affine);
