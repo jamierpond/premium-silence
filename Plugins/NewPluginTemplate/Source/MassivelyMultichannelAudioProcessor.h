@@ -6,6 +6,7 @@
 #define STEREO_DEBUGGING 1
 #endif
 
+// comment
 #define ADD_BUS_PAIR(name, channelSet) \
     .withInput(name " Input", juce::AudioChannelSet::channelSet(), true) \
     .withOutput(name " Output", juce::AudioChannelSet::channelSet(), true)
@@ -97,9 +98,9 @@ private:
         bool outputValid = std::find(supportedChannelSets.begin(), supportedChannelSets.end(), outs) != supportedChannelSets.end();
 
         bool inputMatchesOutput = ins == outs;
-        bool noSideChains = (layouts.inputBuses.size() == 1 && layouts.outputBuses.size() == 1);
+        // bool noSideChains = (layouts.inputBuses.size() == 1 && layouts.outputBuses.size() == 1);
 
-        bool isValid = inputValid && outputValid && inputMatchesOutput && noSideChains;
+        bool isValid = inputValid && outputValid; // && inputMatchesOutput; // && noSideChains;
 
         if (isValid) {
             DBG("Supported layout: " + ins.getDescription());
