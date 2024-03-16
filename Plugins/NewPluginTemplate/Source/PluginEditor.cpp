@@ -6,12 +6,13 @@ PremiumSilenceAudioProcessorEditor::PremiumSilenceAudioProcessorEditor(
     : AudioProcessorEditor(&p)
 {
     addAndMakeVisible(editor);
-    setSize(400, 300);
+    auto bgSize = background.getBounds();
+    setSize(bgSize.getWidth(), bgSize.getHeight());
 }
 
 void PremiumSilenceAudioProcessorEditor::paint(juce::Graphics& g)
 {
-    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+  g.drawImageAt(background, 0, 0);
 }
 
 void PremiumSilenceAudioProcessorEditor::resized()

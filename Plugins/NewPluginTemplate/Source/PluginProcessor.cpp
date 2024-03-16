@@ -11,7 +11,6 @@ void PremiumSilenceAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer
 
 {
     juce::ignoreUnused(midiMessages);
-
     if (parameters.silence_enabled->get())
         buffer.clear();
 }

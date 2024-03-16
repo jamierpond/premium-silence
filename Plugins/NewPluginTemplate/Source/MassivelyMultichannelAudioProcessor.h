@@ -53,7 +53,7 @@ public:
     }
 
 private:
-    bool isBusesLayoutSupported(const BusesLayout& layouts) const override {
+    bool isBusesLayoutSupported(const BusesLayout&) const override {
         return true;
     }
 };

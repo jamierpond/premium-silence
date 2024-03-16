@@ -4,6 +4,17 @@ set (BaseTargetName NewPluginTemplate)
 
 juce_set_aax_sdk_path("/Users/jamiepond/projects/aax-sdk")
 
+# add binary data
+juce_add_binary_data(BinaryData
+      SOURCES
+      ./assets/button_off.png
+      ./assets/bg_text.png
+      ./assets/knob.png
+      ./assets/logo.png
+      ./assets/button_on.png
+)
+
+
 juce_add_plugin("${BaseTargetName}"
         # VERSION ...                               # Set this if the plugin version is different to the project version
         # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
@@ -32,6 +43,7 @@ target_compile_definitions(${BaseTargetName}
 
 target_link_libraries(${BaseTargetName} PRIVATE
         shared_plugin_helpers
+        BinaryData
         juce_recommended_config_flags
         juce_recommended_lto_flags
         juce_recommended_warning_flags)
