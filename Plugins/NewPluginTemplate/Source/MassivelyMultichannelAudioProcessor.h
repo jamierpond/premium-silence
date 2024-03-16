@@ -54,58 +54,6 @@ public:
 
 private:
     bool isBusesLayoutSupported(const BusesLayout& layouts) const override {
-        auto ins = layouts.getMainInputChannelSet();
-        auto outs = layouts.getMainOutputChannelSet();
-
-        const std::array<juce::AudioChannelSet, 33> supportedChannelSets = {
-            juce::AudioChannelSet::mono(),
-            juce::AudioChannelSet::stereo(),
-            juce::AudioChannelSet::createLCR(),
-            juce::AudioChannelSet::createLRS(),
-            juce::AudioChannelSet::createLCRS(),
-            juce::AudioChannelSet::create5point0(),
-            juce::AudioChannelSet::create5point1(),
-            juce::AudioChannelSet::create6point0(),
-            juce::AudioChannelSet::create6point1(),
-            juce::AudioChannelSet::create6point0Music(),
-            juce::AudioChannelSet::create6point1Music(),
-            juce::AudioChannelSet::create7point0(),
-            juce::AudioChannelSet::create7point0SDDS(),
-            juce::AudioChannelSet::create7point1(),
-            juce::AudioChannelSet::create7point1SDDS(),
-            juce::AudioChannelSet::create5point0point2(),
-            juce::AudioChannelSet::create5point1point2(),
-            juce::AudioChannelSet::create5point0point4(),
-            juce::AudioChannelSet::create5point1point4(),
-            juce::AudioChannelSet::create7point0point2(),
-            juce::AudioChannelSet::create7point1point2(),
-            juce::AudioChannelSet::create7point0point4(),
-            juce::AudioChannelSet::create7point1point4(),
-            juce::AudioChannelSet::create7point0point6(),
-            juce::AudioChannelSet::create7point1point6(),
-            juce::AudioChannelSet::create9point0point4(),
-            juce::AudioChannelSet::create9point1point4(),
-            juce::AudioChannelSet::create9point0point6(),
-            juce::AudioChannelSet::create9point1point6(),
-            juce::AudioChannelSet::quadraphonic(),
-            juce::AudioChannelSet::pentagonal(),
-            juce::AudioChannelSet::hexagonal(),
-            juce::AudioChannelSet::octagonal(),
-            // Add more as needed
-        };
-
-        bool inputValid = std::find(supportedChannelSets.begin(), supportedChannelSets.end(), ins) != supportedChannelSets.end();
-        bool outputValid = std::find(supportedChannelSets.begin(), supportedChannelSets.end(), outs) != supportedChannelSets.end();
-
-        bool inputMatchesOutput = ins == outs;
-        // bool noSideChains = (layouts.inputBuses.size() == 1 && layouts.outputBuses.size() == 1);
-
-        bool isValid = inputValid && outputValid; // && inputMatchesOutput; // && noSideChains;
-
-        if (isValid) {
-            DBG("Supported layout: " + ins.getDescription());
-        }
-
-        return isValid;
+        return true;
     }
 };
