@@ -34,27 +34,24 @@ struct ButtonLf : juce::LookAndFeel_V4
         auto sliderBounds = slider.getLocalBounds().toFloat();
         auto imageBounds = knob.getBounds().toFloat();
 
-        auto scaleFactors =
-            juce::jmin(sliderBounds.getWidth() / imageBounds.getWidth(),
-                       sliderBounds.getHeight() / imageBounds.getHeight());
+        auto scaleFactor = juce::jmin(sliderBounds.getWidth() / imageBounds.getWidth(),
+                                      sliderBounds.getHeight() / imageBounds.getHeight())
+                           * 0.7f; // Adjusted scale factor
 
         auto rotation = rotaryStartAngle
                         + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
 
-        // Center of the knob image within the slider bounds
+        // Calculate the center of the image after scaling
+        auto scaledImageWidth = imageBounds.getWidth() * scaleFactor;
+        auto scaledImageHeight = imageBounds.getHeight() * scaleFactor;
         auto imageCenterX = sliderBounds.getCentreX();
-        auto imageCenterY =
-            sliderBounds.getY() + (imageBounds.getHeight() * scaleFactors * 0.5f)
-            + (sliderBounds.getHeight() - imageBounds.getHeight() * scaleFactors) * 0.5f;
+        auto imageCenterY = sliderBounds.getCentreY();
 
-        // Apply scaling, translation, and rotation to the AffineTransform
-        auto affine =
-            juce::AffineTransform()
-                .scaled(scaleFactors)
-                .translated(sliderBounds.getX(),
-                            imageCenterY
-                                - (imageBounds.getHeight() * scaleFactors * 0.5f))
-                .rotated(rotation, imageCenterX, imageCenterY);
+        // Apply scaling, then translation to center, then rotation
+        auto affine = juce::AffineTransform::scale(scaleFactor)
+                          .translated(imageCenterX - scaledImageWidth / 2,
+                                      imageCenterY - scaledImageHeight / 2)
+                          .rotated(rotation, imageCenterX, imageCenterY);
 
         // Draw the image with the transformation applied
         g.drawImageTransformed(knob, affine);
