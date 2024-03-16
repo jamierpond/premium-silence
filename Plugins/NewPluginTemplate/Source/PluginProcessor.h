@@ -16,5 +16,5 @@ public:
 
 private:
 
-    Parameters parameters;
+    juce::AudioProcessorValueTreeState parameters;
 };

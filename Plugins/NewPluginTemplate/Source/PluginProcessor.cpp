@@ -2,16 +2,32 @@
 #include "PluginEditor.h"
 
 PremiumSilenceAudioProcessor::PremiumSilenceAudioProcessor()
+          : parameters (*this, nullptr, juce::Identifier ("APVTSTutorial"),
+                      {
+                          std::make_unique<juce::AudioParameterFloat> (juce::ParameterID("Amount", 1), // parameterID
+                                                                       "Amount",            // parameter name
+                                                                       0.0f,              // minimum value
+                                                                       1.0f,              // maximum value
+                                                                       0.5f),             // default value
+                          std::make_unique<juce::AudioParameterBool> (juce::ParameterID("Silence", 1), // parameterID
+                                                                      "Silence",     // parameter name
+                                                                      true)              // default value
+                      })
 {
-    parameters.add(*this);
 }
 
 void PremiumSilenceAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
                                                 juce::MidiBuffer& midiMessages)
 
 {
-    juce::ignoreUnused(midiMessages);
-    if (parameters.silence_enabled->get())
+    auto amount = parameters.getRawParameterValue ("Amount");
+    juce::ignoreUnused(midiMessages, amount);
+    auto silent = parameters.getRawParameterValue ("Silence");
+    bool shouldBeSilent = silent->load() > 0.5f;
+
+
+
+    if (shouldBeSilent)
         buffer.clear();
 }
 
@@ -22,46 +38,18 @@ juce::AudioProcessorEditor* PremiumSilenceAudioProcessor::createEditor()
 
 void PremiumSilenceAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
-    //Serializes your parameters, and any other potential data into an XML:
-
-    juce::ValueTree params("Params");
-
-    for (auto& param: getParameters())
-    {
-        juce::ValueTree paramTree(PluginHelpers::getParamID(param));
-        paramTree.setProperty("Value", param->getValue(), nullptr);
-        params.appendChild(paramTree, nullptr);
-    }
-
-    juce::ValueTree pluginPreset("MyPlugin");
-    pluginPreset.appendChild(params, nullptr);
-    //This a good place to add any non-parameters to your preset
-
-    copyXmlToBinary(*pluginPreset.createXml(), destData);
+    auto state = parameters.copyState();
+    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, destData);
 }
 
 void PremiumSilenceAudioProcessor::setStateInformation(const void* data,
                                                           int sizeInBytes)
 {
-    //Loads your parameters, and any other potential data from an XML:
-
-    auto xml = getXmlFromBinary(data, sizeInBytes);
-
-    if (xml != nullptr)
-    {
-        auto preset = juce::ValueTree::fromXml(*xml);
-        auto params = preset.getChildWithName("Params");
-
-        for (auto& param: getParameters())
-        {
-            auto paramTree = params.getChildWithName(PluginHelpers::getParamID(param));
-
-            if (paramTree.isValid())
-                param->setValueNotifyingHost(paramTree["Value"]);
-        }
-
-        //Load your non-parameter data now
-    }
+    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName (parameters.state.getType()))
+            parameters.replaceState (juce::ValueTree::fromXml (*xmlState));
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

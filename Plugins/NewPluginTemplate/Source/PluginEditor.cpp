@@ -24,6 +24,7 @@ PremiumSilenceAudioProcessorEditor::PremiumSilenceAudioProcessorEditor(
 
     addAndMakeVisible(silenceButton);
     silenceButton.setButtonText("Silence");
+
 }
 
 void PremiumSilenceAudioProcessorEditor::paint(juce::Graphics& g)
