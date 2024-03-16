@@ -1,7 +1,7 @@
 ![PAMPLEJUCE](assets/images/pamplejuce.png)
-[![](https://github.com/sudara/pamplejuce/workflows/Pamplejuce/badge.svg)](https://github.com/sudara/pamplejuce/actions)
+[![](https://github.com/sudara/pamplejuce/workflows/PremiumSilence/badge.svg)](https://github.com/sudara/pamplejuce/actions)
 
-Pamplejuce is a ~~template~~ lifestyle for creating and building JUCE plugins in 2023.
+PremiumSilence is a ~~template~~ lifestyle for creating and building JUCE plugins in 2023.
 
 Out of the box, it:
 
@@ -34,7 +34,7 @@ If you are new to CMake, I suggest you read up about [JUCE and CMmake on my blog
 
 ## Can I see some examples?
 
-Lots of people have used Pamplejuce as their starting place for their private plugin projects. 
+Lots of people have used PremiumSilence as their starting place for their private plugin projects. 
 
 Two amazing public examples (complete with signed binaries) are:
 
@@ -55,19 +55,19 @@ After you've created a new repo from the template, you have a checklist of thing
 
 * [ ] Populate the  JUCE by running `git submodule update --init` in your repository directory. By default, this will track JUCE's `develop` branch, which is a good default until you are at the point of releasing a plugin. It will also pull in the CMake needed and an example module, my component inspector.
 
-* [ ] Replace `Pamplejuce` with the name of your project in `CMakeLists.txt` where the `PROJECT_NAME` variable is first set. Make this all one word, no spaces. 
+* [ ] Replace `PremiumSilence` with the name of your project in `CMakeLists.txt` where the `PROJECT_NAME` variable is first set. Make this all one word, no spaces. 
 
 * [ ] Adjust which plugin formats you want built as needed (VST3, AU, etc).
 
 * [ ] Set the correct flags for your plugin `juce_add_plugin`. Check out the API https://github.com/juce-framework/JUCE/blob/master/docs/CMake%20API.md and be sure to change things like `PLUGIN_CODE` and `PLUGIN_MANUFACTURER_CODE` and everything that says `Change me!`.
   
-* [ ] Build n' Run! If you want to generate an Xcode project, run `cmake -B Builds -G Xcode`. Or just open the project in CLion or VS2022. Running the standalone might be easiest, but you can also build the `AudioPluginHost` that comes with JUCE. Out of the box, Pamplejuce's VST3/AU targets should already be pointing to it's built location.
+* [ ] Build n' Run! If you want to generate an Xcode project, run `cmake -B Builds -G Xcode`. Or just open the project in CLion or VS2022. Running the standalone might be easiest, but you can also build the `AudioPluginHost` that comes with JUCE. Out of the box, PremiumSilence's VST3/AU targets should already be pointing to it's built location.
 
 * [ ] If you want to package and code sign, you'll want to take a look at the packaging/ directory add assets and config that match your product. Otherwise, you can delete the GitHub Action workflow steps that handle packaging (macOS will need code signing steps to work properly).
 
 This is what you will see when it's built, the plugin displaying its version number with a button that opens up the [Melatonin Inspector](https://github.com/sudara/melatonin_inspector): 
 
-![Pamplejuce v1 - 2023-08-28 41@2x](https://github.com/sudara/pamplejuce/assets/472/33a9c8d5-fc3f-42e7-bd06-21a1559c7128)
+![PremiumSilence v1 - 2023-08-28 41@2x](https://github.com/sudara/pamplejuce/assets/472/33a9c8d5-fc3f-42e7-bd06-21a1559c7128)
 
 
 ## FAQ
@@ -134,13 +134,13 @@ This repo code signs Windows via Azure Key Vault. [Read more about how to set it
 
 It also code signs and notarizes on macOS. Again, you can [read my article for details](https://melatonin.dev/blog/how-to-code-sign-and-notarize-macos-audio-plugins-in-ci/).
 
-## How do I update my Pamplejuce-based project?
+## How do I update my PremiumSilence-based project?
 
 1. Update with the latest CMake version [listed here](https://github.com/lukka/get-cmake), or the latest version supported by your toolchain like VS or Clion.
 2. Update JUCE with `git submodule update --remote --merge JUCE`
 3. Update the inspector with `git submodule update --remote --merge modules/melatonin_inspector`
 4. Check for an [IPP update from Intel](https://github.com/oneapi-src/oneapi-ci/blob/master/.github/workflows/build_all.yml#L10).
-5. If you want to update to the latest CMake config Pamplejuce uses, first check the repository's [CHANGELOG](https://github.com/sudara/cmake-includes/blob/main/CHANGELOG.md) to make sure you are informed of any breaking changes. Then. `git submodule update --remote --merge cmake`. Unfortunately, you'll have to manually compare `CMakeLists.txt`, but it should be pretty easy to see what changed.
+5. If you want to update to the latest CMake config PremiumSilence uses, first check the repository's [CHANGELOG](https://github.com/sudara/cmake-includes/blob/main/CHANGELOG.md) to make sure you are informed of any breaking changes. Then. `git submodule update --remote --merge cmake`. Unfortunately, you'll have to manually compare `CMakeLists.txt`, but it should be pretty easy to see what changed.
 
 ## How to Cut A GitHub Release
 
@@ -164,7 +164,7 @@ git push --tags
 
 ## How do I add *private* github repos as JUCE modules?
 
-Generate an ssh key (without a passphrase) for the repository and add it as a secret to your Pamplejuce-derived repository. 
+Generate an ssh key (without a passphrase) for the repository and add it as a secret to your PremiumSilence-derived repository. 
 
 Then, use the `ssh_key` option in the checkout action, like so:
 
@@ -208,11 +208,11 @@ It can be confusing. The documentation is a big fragmented. Here are some tips.
 
 If you want to build both plugin targets and a test target, unfortunately the additional abstraction of the INTERFACE `SharedCode` target is needed  (as of Nov 2023). If you aren't running tests, shame on you, but hey, you can simply edit the CMake and get rid of it :)
 
-The summary: JUCE modules build separately for each target. You need to link against them with PRIVATE visibility.  But both JUCE's internal plugin shared code target (which powers the formats like AU, VST, etc) and Pamplejuce's `Tests` target need to link against the same JUCE modules. 
+The summary: JUCE modules build separately for each target. You need to link against them with PRIVATE visibility.  But both JUCE's internal plugin shared code target (which powers the formats like AU, VST, etc) and PremiumSilence's `Tests` target need to link against the same JUCE modules. 
 
 This becomes a problem when you link `Tests` to `YourPlugin` target, as it causes ODL issues and confuses your IDE. Additionally, it is hard/impossible to set different compile definitions for the `Tests` target vs. plugin targets (for example, you'll probably need to enable the deprecated modal loops, guard macros for running tests, etc).
 
-I spoke with [Reuben at JUCE a bit about this here](https://forum.juce.com/t/windows-linker-issue-on-develop/55524/2) and there's a Pamplejuce [issue with background here](https://github.com/sudara/pamplejuce/issues/31). 
+I spoke with [Reuben at JUCE a bit about this here](https://forum.juce.com/t/windows-linker-issue-on-develop/55524/2) and there's a PremiumSilence [issue with background here](https://github.com/sudara/pamplejuce/issues/31). 
 
 ## What if I need to include files not in modules and not in `/source`?
 
