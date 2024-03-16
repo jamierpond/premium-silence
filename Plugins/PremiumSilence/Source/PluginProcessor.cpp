@@ -2,30 +2,46 @@
 #include "PluginEditor.h"
 
 PremiumSilenceAudioProcessor::PremiumSilenceAudioProcessor()
-          : parameters (*this, nullptr, juce::Identifier ("APVTSTutorial"),
-                      {
-                          std::make_unique<juce::AudioParameterFloat> (juce::ParameterID("Amount", 1), // parameterID
-                                                                       "Amount",            // parameter name
-                                                                       0.0f,              // minimum value
-                                                                       1.0f,              // maximum value
-                                                                       0.5f),             // default value
-                          std::make_unique<juce::AudioParameterBool> (juce::ParameterID("Silence", 1), // parameterID
-                                                                      "Silence",     // parameter name
-                                                                      false)              // default value
-                      })
+    : parameters(*this,
+                 nullptr,
+                 juce::Identifier("APVTSTutorial"),
+                 {
+                     std::make_unique<juce::AudioParameterFloat>(
+                         juce::ParameterID("Amount", 1), // parameterID
+                         "Amount", // parameter name
+                         0.0f, // minimum value
+                         1.0f, // maximum value
+                         0.5f), // default value
+                     std::make_unique<juce::AudioParameterBool>(
+                         juce::ParameterID("Silence", 1), // parameterID
+                         "Silence", // parameter name
+                         false) // default value
+                 })
 {
 }
 
-void PremiumSilenceAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
-                                                juce::MidiBuffer& midiMessages)
+void PremiumSilenceAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    auto amount = parameters.getRawParameterValue ("Amount");
-    juce::ignoreUnused(midiMessages, amount);
-    auto silent = parameters.getRawParameterValue ("Silence");
-    bool shouldBeSilent = silent->load() > 0.5f;
+    juce::ignoreUnused(sampleRate, samplesPerBlock);
+    smoothGain.reset(sampleRate, 0.2);
+}
 
+void PremiumSilenceAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
+                                                juce::MidiBuffer&)
+{
+    auto newValue = parameters.getRawParameterValue("Silence")->load();
+    bool shouldBeSilent = newValue > 0.5f;
     if (shouldBeSilent)
-        buffer.clear();
+    {
+        smoothGain.setTargetValue(0.0f);
+    }
+    else
+    {
+        smoothGain.setTargetValue(1.0f);
+    }
+
+    smoothGain.applyGain(buffer, buffer.getNumSamples());
+    smoothGain.skip(buffer.getNumSamples());
 }
 
 juce::AudioProcessorEditor* PremiumSilenceAudioProcessor::createEditor()
@@ -36,17 +52,16 @@ juce::AudioProcessorEditor* PremiumSilenceAudioProcessor::createEditor()
 void PremiumSilenceAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
     auto state = parameters.copyState();
-    std::unique_ptr<juce::XmlElement> xml (state.createXml());
-    copyXmlToBinary (*xml, destData);
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
-void PremiumSilenceAudioProcessor::setStateInformation(const void* data,
-                                                          int sizeInBytes)
+void PremiumSilenceAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
-    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
     if (xmlState.get() != nullptr)
-        if (xmlState->hasTagName (parameters.state.getType()))
-            parameters.replaceState (juce::ValueTree::fromXml (*xmlState));
+        if (xmlState->hasTagName(parameters.state.getType()))
+            parameters.replaceState(juce::ValueTree::fromXml(*xmlState));
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
