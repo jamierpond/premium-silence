@@ -1,16 +1,4 @@
-# JUCE CMake Repo Prototype
-A prototype to model a way to create an entire repo using JUCE 6 and CMake.
-
-This is inspired by a desire to keep the environment setting of my projects to minimum,
-making sure the environment is identical for every developer/machine.
-
-The main concept is to set all the different variables (where JUCE is, custom modules, etc) 
-in the top CMakeLists.txt, then add all your projects with very little setup time.
-
-Another important concept is to share all 'related' projects under the same configuration,
-which I prefer, since it encourages code-sharing and build system settings sharing.
-In some of the examples I added minimal usages of juce-style modules to illustrate how that
-can be done.
+# Premium Silence by Present Day Production
 
 To build, all you have to do is load this project in your favorite IDE 
 (CLion/Visual Studio/VSCode/etc) 
