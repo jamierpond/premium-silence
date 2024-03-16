@@ -52,7 +52,13 @@ void PremiumSilenceAudioProcessorEditor::resized()
 
     {
         auto bounds = getLocalBounds().toFloat();
-        auto buttonBounds = bounds.removeFromLeft(bounds.getWidth() / 4);
+        // place symettically in the middle
+        // remove the same amount from the left and right
+        auto buttonBounds = bounds;
+        buttonBounds.removeFromLeft(bounds.getWidth() / 4);
+        buttonBounds.removeFromRight(bounds.getWidth() / 4);
+        buttonBounds.removeFromTop(bounds.getHeight() / 4);
+        buttonBounds.removeFromBottom(bounds.getHeight() / 4);
         silenceButton.setBounds(buttonBounds.toNearestInt());
     }
 }
