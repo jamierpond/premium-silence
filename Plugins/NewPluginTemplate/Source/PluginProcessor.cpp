@@ -11,7 +11,7 @@ PremiumSilenceAudioProcessor::PremiumSilenceAudioProcessor()
                                                                        0.5f),             // default value
                           std::make_unique<juce::AudioParameterBool> (juce::ParameterID("Silence", 1), // parameterID
                                                                       "Silence",     // parameter name
-                                                                      true)              // default value
+                                                                      false)              // default value
                       })
 {
 }

@@ -21,6 +21,7 @@ PremiumSilenceAudioProcessorEditor::PremiumSilenceAudioProcessorEditor(
 
     addAndMakeVisible(amountSlider);
     amountSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    amountSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
 
     addAndMakeVisible(silenceButton);
     silenceButton.setButtonText("Silence");
