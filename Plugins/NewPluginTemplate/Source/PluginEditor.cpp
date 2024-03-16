@@ -24,6 +24,13 @@ PremiumSilenceAudioProcessorEditor::PremiumSilenceAudioProcessorEditor(
 
     addAndMakeVisible(silenceButton);
     silenceButton.setButtonText("Silence");
+
+    sliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        p.parameters, "Amount", amountSlider);
+
+    buttonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
+        p.parameters, "Silence", silenceButton);
+
 }
 
 void PremiumSilenceAudioProcessorEditor::paint(juce::Graphics& g)

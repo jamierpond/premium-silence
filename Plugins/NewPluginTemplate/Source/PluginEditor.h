@@ -18,4 +18,9 @@ private:
 
     juce::Slider amountSlider;
     juce::ToggleButton silenceButton;
+
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
+    std::unique_ptr<SliderAttachment> sliderAttachment;
+    std::unique_ptr<ButtonAttachment> buttonAttachment;
 };
