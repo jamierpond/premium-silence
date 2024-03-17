@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "MassivelyMultichannelAudioProcessor.h"
 
 PremiumSilenceAudioProcessor::PremiumSilenceAudioProcessor()
     : parameters(*this,

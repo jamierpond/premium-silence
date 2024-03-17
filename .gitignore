@@ -1,31 +1,34 @@
-*.user
-
-SDKs
-
-build
-build-ios
-
-cmake-build-debug
-cmake-build-release
-CMakeFiles
+CMakeLists.txt.user
 CMakeCache.txt
-cmake_install.cmake
+CMakeFiles
 CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+**/.DS_Store
 
+# It's nice to have the Builds folder exist, to remind us where it is
+Builds/*
+!Builds/.gitkeep
+
+# This should never exist
+Install/*
+
+# Running CTest makes a bunch o junk
+Testing
+
+# IDE config
 .idea
 
-IDEWorkspaceChecks.plist
-UserInterfaceState.xcuserstate
-xcschememanagement.plist
-*.xcscheme
-.vscode
-*.xcworkspace
-*.DS_Store
-*.entitlements
-*.cpb
-Makefile
+# clion cmake builds
+cmake-build-debug
+cmake-build-release
+cmake-build-relwithdebinfo
+packaging/Output/*
 
-workspace.xml
-xcuserdata
-/Apps/SerumStandAlone/Builds/MacOSX/RecentFilesMenuTemplate.nib
 **.cache/**/*
+**build/**/*
+

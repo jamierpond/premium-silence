@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Parameters.h"
 
 #ifndef JUCE_DEBUG
