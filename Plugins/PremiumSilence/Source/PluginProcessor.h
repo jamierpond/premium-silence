@@ -3,7 +3,8 @@
 #include "MassivelyMultichannelAudioProcessor.h"
 
 class PremiumSilenceAudioProcessor
-  : public MassivelyMultichannelAudioProcessor
+    : public MassivelyMultichannelAudioProcessor
+    , public juce::AudioProcessorValueTreeState::Listener
 {
 public:
     PremiumSilenceAudioProcessor();
@@ -17,8 +18,24 @@ public:
     void getStateInformation(juce::MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
+    void parameterChanged(const juce::String& parameterID, float newValue) override
+    {
+        if (parameterID == "Silence")
+        {
+            bool shouldBeSilent = newValue > 0.5f;
+            if (shouldBeSilent)
+            {
+                smoothGain.setTargetValue(0.0f);
+            }
+            else
+            {
+                smoothGain.setTargetValue(1.0f);
+            }
+        }
+    }
+
     juce::AudioProcessorValueTreeState parameters;
+
 private:
-    juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear>
-      smoothGain{1.0f};
+    juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> smoothGain {1.0f};
 };

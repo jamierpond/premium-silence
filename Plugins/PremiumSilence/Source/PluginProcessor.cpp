@@ -18,6 +18,7 @@ PremiumSilenceAudioProcessor::PremiumSilenceAudioProcessor()
                          false) // default value
                  })
 {
+    parameters.addParameterListener("Silence", this);
 }
 
 void PremiumSilenceAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
@@ -29,15 +30,20 @@ void PremiumSilenceAudioProcessor::prepareToPlay(double sampleRate, int samplesP
 void PremiumSilenceAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
                                                 juce::MidiBuffer&)
 {
-    auto newValue = parameters.getRawParameterValue("Silence")->load();
-    bool shouldBeSilent = newValue > 0.5f;
-    if (shouldBeSilent)
+    const auto currentValue = smoothGain.getCurrentValue();
+    auto isOne = juce::approximatelyEqual(currentValue, 1.0f);
+    if (isOne)
     {
-        smoothGain.setTargetValue(0.0f);
+        smoothGain.skip(buffer.getNumSamples());
+        return;
     }
-    else
+
+    auto isZero = juce::approximatelyEqual(currentValue, 0.0f);
+    if (isZero)
     {
-        smoothGain.setTargetValue(1.0f);
+        buffer.clear();
+        smoothGain.skip(buffer.getNumSamples());
+        return;
     }
 
     smoothGain.applyGain(buffer, buffer.getNumSamples());
