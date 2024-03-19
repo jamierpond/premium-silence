@@ -120,6 +120,10 @@ class PremiumSilenceAudioProcessorEditor : public juce::AudioProcessorEditor
 public:
     explicit PremiumSilenceAudioProcessorEditor(PremiumSilenceAudioProcessor&);
 
+    ~PremiumSilenceAudioProcessorEditor() override {
+        setLookAndFeel(nullptr);
+    }
+
 private:
     void paint(juce::Graphics&) override;
     void resized() override;

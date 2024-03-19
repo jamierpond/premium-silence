@@ -1,6 +1,8 @@
 #include "PluginProcessor.h"
-#include "PluginEditor.h"
 #include "MassivelyMultichannelAudioProcessor.h"
+#include "PluginEditor.h"
+#include "juce_core/system/juce_CompilerWarnings.h"
+#include "juce_core/system/juce_TargetPlatform.h"
 
 PremiumSilenceAudioProcessor::PremiumSilenceAudioProcessor()
     : parameters(*this,
@@ -32,17 +34,17 @@ void PremiumSilenceAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer
                                                 juce::MidiBuffer&)
 {
     const auto currentValue = smoothGain.getCurrentValue();
-    auto isOne = juce::approximatelyEqual(currentValue, 1.0f);
-    if (isOne)
+    if (isApproxZero(currentValue))
     {
+        DBG("Silence");
+        buffer.clear();
         smoothGain.skip(buffer.getNumSamples());
         return;
     }
 
-    auto isZero = juce::approximatelyEqual(currentValue, 0.0f);
-    if (isZero)
+    auto isOne = juce::approximatelyEqual(currentValue, 1.0f);
+    if (isOne)
     {
-        buffer.clear();
         smoothGain.skip(buffer.getNumSamples());
         return;
     }

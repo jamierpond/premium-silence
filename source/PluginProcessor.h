@@ -1,6 +1,16 @@
 #pragma once
 
 #include "MassivelyMultichannelAudioProcessor.h"
+#include <cstdint>
+
+static inline bool isApproxZero(float v) noexcept
+{
+      auto value = *reinterpret_cast<uint32_t*>(&v);
+      constexpr uint32_t ifSetNotZero = 0b0'11000000'00000000'00000000'0000000;
+      return (value & ifSetNotZero) == 0;
+}
+
+
 
 class PremiumSilenceAudioProcessor
     : public MassivelyMultichannelAudioProcessor
